@@ -41,6 +41,7 @@
             <v-text-field
                 v-model="cpf"
                 label="CPF"
+                :rules="cpfRules"
                 hide-details
                 required
             ></v-text-field>
@@ -87,6 +88,10 @@
                     return 'E-mail must be valid.'
                 },
             ],
+            cpfRules:[
+                v => !!v || 'CPF é obrigatório',
+                v => (v && /^[0-9]{11}$/.test(v)) || 'CPF inválido',
+            ]
         }),
         methods: {
             submitForm() {
