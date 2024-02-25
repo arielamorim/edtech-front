@@ -48,6 +48,7 @@
         </v-row>
         <v-row>
             <v-btn type="submit">Enviar</v-btn>
+            <v-btn @click="cancelCreate">Cancelar</v-btn>
         </v-row>
         </v-container>
     </v-form>
@@ -100,11 +101,15 @@
                 axios.post('http://localhost:4033/student/create', formData)
                     .then(response => {
                         console.log(response.data);
-                        this.$router.push('/students')
+                        this.$router.push({ name: 'students'})
 
                     })
                     .catch(error => {
                         console.error('Error:', error);
                     });
-    }}}
+            },
+            cancelCreate() {
+                this.$router.push({ name: 'students'})
+            }
+    }}
 </script>

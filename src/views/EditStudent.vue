@@ -27,6 +27,7 @@
     </v-row>
     <v-row>
         <v-btn type="submit">Salvar</v-btn>
+        <v-btn @click="cancelEdit">Cancelar</v-btn>
     </v-row>
     </v-container>
 </v-form>
@@ -43,24 +44,20 @@ data: () => ({
     email: '',
     ra: '',
     nameRules: [
-    value => {
-        if (value) return true;
-        return 'Name is required.';
-    },
-    value => {
-        if (value?.length <= 10) return true;
-        return 'Name must be less than 10 characters.';
-    },
+        value => {
+            if (value) return true;
+            return 'Name is required.';
+        }
     ],
     emailRules: [
-    value => {
-        if (value) return true;
-        return 'E-mail is required.';
-    },
-    value => {
-        if (/.+@.+\..+/.test(value)) return true;
-        return 'E-mail must be valid.';
-    },
+        value => {
+            if (value) return true;
+            return 'E-mail is required.';
+        },
+        value => {
+            if (/.+@.+\..+/.test(value)) return true;
+            return 'E-mail must be valid.';
+        },
     ],
 }),
 mounted() {
@@ -99,6 +96,9 @@ methods: {
         console.error('Error:', error);
         });
     },
+    cancelEdit () {
+        this.$router.push({ name: 'students'});
+    }
 },
 };
 </script>

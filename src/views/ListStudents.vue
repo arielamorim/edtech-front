@@ -12,7 +12,10 @@
     </v-btn>
 </v-app-bar>
 
-    <v-data-table :headers="headers" :items="studentList" item-key="id">
+<v-text-field v-model="search" label="Pesquisar" solo prepend-inner-icon="mdi-magnify"></v-text-field>
+
+
+    <v-data-table :headers="headers" :items="studentList" item-key="id" :search="search">
     <template v-slot:item="{ item }">
         <tr>
         <td>{{ item.ra }}</td>
@@ -35,14 +38,26 @@ import axios from 'axios';
 export default {
     data() {
         return {
-        studentList: [],
-        headers: [
-        { text: 'RA', value: 'ra' },
-        { text: 'Nome', value: 'name' },
-        { text: 'E-mail', value: 'email' },
-        { text: 'CPF', value: 'cpf' },
-        { text: 'Ações', sortable: false },]
-    };
+            studentList: [],
+            headers: [
+                { text: 'RA', value: 'ra' },
+                { text: 'Nome', value: 'name' },
+                { text: 'E-mail', value: 'email' },
+                { text: 'CPF', value: 'cpf' },
+                { text: 'Ações', sortable: false },
+            ],
+            search: '',
+        };
+    },
+    computed: {
+        filteredStudents() {
+            return this.studentList.filter(student =>
+                student.ra.includes(this.search) ||
+                student.name.includes(this.search) ||
+                student.email.includes(this.search) ||
+                student.cpf.includes(this.search)
+            );
+        },
     },
     mounted() {
         this.fetchStudents();
