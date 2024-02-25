@@ -14,6 +14,18 @@
 
 <v-text-field v-model="search" label="Pesquisar" solo prepend-inner-icon="mdi-magnify"></v-text-field>
 
+<v-dialog v-model="dialogDelete" max-width="500">
+    <v-card>
+    <v-card-title>Confirmar Exclusão</v-card-title>
+    <v-card-text>
+        Tem certeza de que deseja excluir este aluno?
+    </v-card-text>
+    <v-card-actions>
+        <v-btn color="error" text @click="dialogDelete = false">Cancelar</v-btn>
+        <v-btn color="success" text @click="deleteStudent">Confirmar</v-btn>
+    </v-card-actions>
+    </v-card>
+</v-dialog>
 
     <v-data-table :headers="headers" :items="studentList" item-key="id" :search="search">
     <template v-slot:item="{ item }">
@@ -24,7 +36,7 @@
         <td>{{ item.cpf }}</td>
         <td>
             <v-btn @click="editStudent(item.id)" >Editar</v-btn>
-            <v-btn @click="deleteStudent(item.id)" >Excluir</v-btn>
+            <v-btn @click="confirmDelete(item.id)" >Excluir</v-btn>
         </td>
         </tr>
     </template>
@@ -47,16 +59,22 @@ export default {
                 { text: 'Ações', sortable: false },
             ],
             search: '',
+            dialogDelete: false,
+            deleteStudentId: null
         };
     },
     computed: {
-        filteredStudents() {
-            return this.studentList.filter(student =>
-                student.ra.includes(this.search) ||
-                student.name.includes(this.search) ||
-                student.email.includes(this.search) ||
-                student.cpf.includes(this.search)
-            );
+        filteredStudents: {
+            get() {
+                return this.studentList.filter(student =>
+                    student.ra.toLowerCase().includes(this.search.toLowerCase()) ||
+                    student.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                    student.email.toLowerCase().includes(this.search.toLowerCase()) ||
+                    student.cpf.toLowerCase().includes(this.search.toLowerCase())
+                );
+            },
+            set(value) {
+            }
         },
     },
     mounted() {
@@ -78,11 +96,16 @@ export default {
             
             this.$router.push({ name: 'editstudent', params: { id: studentId } });
         },
-        async deleteStudent(studentId) {
+        confirmDelete(studentId) {
+            this.deleteStudentId = studentId;
+            this.dialogDelete = true;
+        },
+        async deleteStudent() {
             try {
-                await axios.post(`http://localhost:4033/student/delete/${studentId}`);
-                
-                this.studentList = this.studentList.filter(student => student.id !== studentId);
+                await axios.post(`http://localhost:4033/student/delete/${this.deleteStudentId}`);
+                this.studentList = this.studentList.filter(student => student.id !== this.deleteStudentId);
+                this.filteredStudents = this.studentList;
+                this.dialogDelete = false;
             } catch (error) {
                 console.error('Error deleting student:', error);
             }
