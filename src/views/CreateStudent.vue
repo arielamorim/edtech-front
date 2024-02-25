@@ -1,5 +1,8 @@
 <template>
     <v-form id="create" v-model="valid" @submit.prevent="submitForm">
+        <v-app-bar :elevation="2">
+        <v-app-bar-title>Cadastrar aluno</v-app-bar-title>
+        </v-app-bar>
         <v-container>
         <v-row>
             <v-col cols="12" md="4">

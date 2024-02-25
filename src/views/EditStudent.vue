@@ -1,5 +1,9 @@
 <template>
 <v-form id="edit" v-model="valid" @submit.prevent="submitForm">
+    <v-app-bar :elevation="2">
+    <v-app-bar-title>Editar cadastro</v-app-bar-title>
+    </v-app-bar>
+
     <v-container>
     <v-row>
         <v-col cols="12" md="4">
