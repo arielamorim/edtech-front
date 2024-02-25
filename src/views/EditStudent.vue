@@ -17,12 +17,12 @@
     </v-row>
     <v-row>
         <v-col cols="12" md="4">
-        <v-text-field v-model="ra" label="Registro Academico" hide-details required></v-text-field>
+        <v-text-field v-model="ra" label="Registro Academico" hide-details readonly required></v-text-field>
         </v-col>
     </v-row>
     <v-row>
         <v-col cols="12" md="4">
-        <v-text-field v-model="cpf" label="CPF" hide-details required></v-text-field>
+        <v-text-field v-model="cpf" label="CPF" hide-details readonly required></v-text-field>
         </v-col>
     </v-row>
     <v-row>
