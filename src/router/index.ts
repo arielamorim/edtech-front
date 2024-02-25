@@ -3,6 +3,11 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import CreateStudent from '../views/CreateStudent.vue'
+import ListStudents from '../views/ListStudents.vue'
+import EditStudent from '../views/EditStudent.vue'
+import UserLogin from '../views/UserLogin.vue'
+import UserLogout from '../views/UserLogout.vue'
+import authService from '@/services/authService'
 
 Vue.use(VueRouter)
 
@@ -15,17 +20,37 @@ const routes: Array<RouteConfig> = [
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
     component: AboutView
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: UserLogin,
+    meta: { requiresAuth: false }
   },
   {
     path: '/createstudent',
     name: 'createstudent',
-    component: CreateStudent
-  }
+    component: CreateStudent,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/students',
+    name: 'students',
+    component: ListStudents,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: UserLogout
+  },
+  {
+    path: '/editstudent',
+    name: 'editstudent',
+    component: EditStudent,
+    meta: { requiresAuth: true }
+  }  
 ]
 
 const router = new VueRouter({
@@ -33,5 +58,15 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach( async (to, from, next) => {
+  const isAuth = await authService.isAuthenticated()
+  
+  if (to.name !== 'login' && to.meta?.requiresAuth && !isAuth) {
+    next({ name: 'login'});
+  } else {
+    next();
+  }
+});
 
 export default router

@@ -86,18 +86,19 @@
         }),
         methods: {
             submitForm() {
-                // Prepare the data object to send to the API
+                
                 const formData = {
                     name: this.name,
                     email: this.email,
                     ra: this.ra,
                     cpf: this.cpf
                 };
-                console.log("Form DATA -->", formData)
-                // Make the Axios POST request
-                axios.post('https://your-api-endpoint.com/your-route', formData)
+                
+                axios.post('http://localhost:4033/student/create', formData)
                     .then(response => {
                         console.log(response.data);
+                        this.$router.push('/students')
+
                     })
                     .catch(error => {
                         console.error('Error:', error);
